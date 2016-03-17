@@ -69,21 +69,21 @@
     new-grid) )
 
 (defun conflicting-number-in-row (grid num row &optional (col 0))
-  "Are their any values equal to 'num' in the given row?"
+  "Are there any values equal to 'num' in the given row?"
   (cond
    ((>= col 9) nil)
    ((= (grid-elem grid row col) num) t)
    (t (conflicting-number-in-row grid num row (+ col 1))) ) )
 
 (defun conflicting-number-in-col (grid num col &optional (row 0))
-  "Are their any values equal to 'num' in the given column?"
+  "Are there any values equal to 'num' in the given column?"
   (cond
    ((>= row 9) nil)
    ((= (grid-elem grid row col) num) t)
    (t (conflicting-number-in-col grid num col (+ row 1))) ) )
 
 (defun conflicting-number-in-block (grid num row col &optional (r 0) (c 0))
-  "Are their any values equal to 'num' in the 3x3 block with origin (row,col)?"
+  "Are there any values equal to 'num' in the 3x3 block with origin (row,col)?"
   (cond
    ((>= r 3) nil)
    ((= (grid-elem grid (+ row r) (+ col c)) num) t)
@@ -93,7 +93,7 @@
     (conflicting-number-in-block grid num row col (+ r 1) 0) ) ) )
 
 (defun conflicting-number (grid num row col)
-  "Are their any values equal to 'num' in the row, column, or 3x3 block?"
+  "Are there any values equal to 'num' in the row, column, or 3x3 block?"
   (or
    (conflicting-number-in-row grid num row)
    (conflicting-number-in-col grid num col)
