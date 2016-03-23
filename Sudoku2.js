@@ -11,16 +11,35 @@
  *    * No sideffects (all function simple return value).
  */
 
+//
+// See the following Stack Overflow question for a discussion
+// about using Object.create() versus "new":
+// http://goo.gl/pFco47
+//
+
+//
+// Base object from which all puzzle instances inherit from.
+// The 9x9 Sudoku grid is encoded as a grid of 81 integers
+// in row-major order with values between 0 and 9 where 
+// 0 means "empty" cell.
+//
 var sudokuPuzzle = {
     grid : Array(81).fill(0)
 };
 
+//
+// Create a new puzzle by copying the given array.
+//
 sudokuPuzzle.createFromArray = function(array) {
     var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = array.slice(0);
     return puzzle;
 }
 
+//
+// Create puzzle from string of 81 characters ('.' is for
+// empty cell, '1'..'9' for numbers.
+//
 sudokuPuzzle.createFromString = function(string) {
     var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = Array.prototype.map.call(string, function (c) {
@@ -31,6 +50,12 @@ sudokuPuzzle.createFromString = function(string) {
     return puzzle;
 }
 
+//
+// Clone a puzzle.
+// Note is is importand to inherit from base object (to
+// avoid long inheritance chains).
+// http://goo.gl/pFco47
+//
 sudokuPuzzle.clone = function() {
     var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = this.grid.slice(0);
