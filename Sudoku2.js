@@ -16,13 +16,13 @@ var sudokuPuzzle = {
 };
 
 sudokuPuzzle.createFromArray = function(array) {
-    var puzzle = Object.create(this);
+    var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = array.slice(0);
     return puzzle;
 }
 
 sudokuPuzzle.createFromString = function(string) {
-    var puzzle = Object.create(this);
+    var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = Array.prototype.map.call(string, function (c) {
         if (c == ".")
             return 0
@@ -32,7 +32,7 @@ sudokuPuzzle.createFromString = function(string) {
 }
 
 sudokuPuzzle.clone = function() {
-    var puzzle = Object.create(this);
+    var puzzle = Object.create(sudokuPuzzle);
     puzzle.grid = this.grid.slice(0);
     return puzzle;
 }
