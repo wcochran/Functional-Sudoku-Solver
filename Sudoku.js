@@ -9,13 +9,13 @@
  */
 
 //
-// SudokuGrid contructor.
-// Creates a SudokuGrid instance from a string, array, or another SudokuGrid.
+// SudokuPuzzle contructor.
+// Creates a SudokuPuzzle instance from a string, array, or another SudokuPuzzle.
 // Internally the 9x9 grid is represented with an array of 81 integers
 // in row-major order. 0 represents an empty cell, where 1..9 represents an
 // entered value.
 //
-function SudokuGrid(obj) {
+function SudokuPuzzle(obj) {
     if (typeof(obj) === 'string')
         this.grid =  Array.prototype.map.call(obj, function (c) {
             if (c == ".")
@@ -24,7 +24,7 @@ function SudokuGrid(obj) {
         });
     else if (Array.isArray(obj))
         this.grid = obj.slice(0);
-    else if (obj instanceof SudokuGrid)
+    else if (obj instanceof SudokuPuzzle)
         this.grid = obj.grid.slice(0);
     return this;
 }
@@ -32,15 +32,15 @@ function SudokuGrid(obj) {
 //
 // Fetch number from grid at (row, col).
 //
-SudokuGrid.prototype.elem = function(row, col) {
+SudokuPuzzle.prototype.elem = function(row, col) {
     return this.grid[row*9 + col]
 }
 
 //
 // Returns new grid with updated value 'num' stored at (row, col).
 //
-SudokuGrid.prototype.update = function(row, col, num) {
-    var puzzle = new SudokuGrid(this);
+SudokuPuzzle.prototype.update = function(row, col, num) {
+    var puzzle = new SudokuPuzzle(this);
     puzzle.grid[row*9 + col] = num;
     return puzzle;
 }
@@ -48,7 +48,7 @@ SudokuGrid.prototype.update = function(row, col, num) {
 //
 // Return true iff there is value equal to 'num' stored in the given 'row.'
 //
-SudokuGrid.prototype.conflictingNumberInRow = function(num, row) {
+SudokuPuzzle.prototype.conflictingNumberInRow = function(num, row) {
     var me = this;
     function conflicting(col) {
         if (col >= 9)
@@ -64,7 +64,7 @@ SudokuGrid.prototype.conflictingNumberInRow = function(num, row) {
 //
 // Return true iff there is value equal to 'num' stored in the given 'column.'
 //
-SudokuGrid.prototype.conflictingNumberInColumn = function(num, col) {
+SudokuPuzzle.prototype.conflictingNumberInColumn = function(num, col) {
     var me = this;
     function conflicting(row) {
         if (row >= 9)
@@ -81,7 +81,7 @@ SudokuGrid.prototype.conflictingNumberInColumn = function(num, col) {
 // Return true iff there is value equal to 'num' stored in the 3x3 block
 // with corner at (row, col).
 //
-SudokuGrid.prototype.conflictingNumberInBlock = function(num, row, col) {
+SudokuPuzzle.prototype.conflictingNumberInBlock = function(num, row, col) {
     var me = this;
     function conflicting(r, c) {
         if (r >= 3)
@@ -101,7 +101,7 @@ SudokuGrid.prototype.conflictingNumberInBlock = function(num, row, col) {
 // Returns tree iff there is a value equal to num in the same row, 
 // column, or 3x3 block indexed by (row, col).
 //
-SudokuGrid.prototype.conflictingNumber = function(num, row, col) {
+SudokuPuzzle.prototype.conflictingNumber = function(num, row, col) {
     return this.conflictingNumberInRow(num, row) ||
            this.conflictingNumberInColumn(num, col) ||
            this.conflictingNumberInBlock(num, Math.trunc(row/3)*3, Math.trunc(col/3)*3);
@@ -112,7 +112,7 @@ SudokuGrid.prototype.conflictingNumber = function(num, row, col) {
 // of the first zero in the linear grid.
 // Returns -1 if there are no zeroes in the grid.
 //
-SudokuGrid.prototype.unassignedLocation = function() {
+SudokuPuzzle.prototype.unassignedLocation = function() {
     var me = this;
     function zeroIndex(index) {
         if (index >= 81)
@@ -129,7 +129,7 @@ SudokuGrid.prototype.unassignedLocation = function() {
 // Top-level solved function.
 // Returns solved Sudoku grid (or null if no solution).
 //
-SudokuGrid.prototype.solve = function() {
+SudokuPuzzle.prototype.solve = function() {
     var index = this.unassignedLocation();
     if (index < 0)
         return this; // solved;
@@ -147,7 +147,7 @@ SudokuGrid.prototype.solve = function() {
 //
 // Attempts to solve grid using all digits 1..9 at (row,col).
 //
-SudokuGrid.prototype.solveStartingAtCell = function(row, col) {
+SudokuPuzzle.prototype.solveStartingAtCell = function(row, col) {
     var me = this;
     function solveWithNumber(num) {
         if (num > 9)
@@ -166,7 +166,7 @@ SudokuGrid.prototype.solveStartingAtCell = function(row, col) {
 }
 
 var puzzleStr = ".94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8";
-var puzzle = new SudokuGrid(puzzleStr);
+var puzzle = new SudokuPuzzle(puzzleStr);
 var soln = puzzle.solve();
 process.stdout.write(soln.grid.toString());
 
